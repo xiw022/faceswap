@@ -104,6 +104,29 @@ If you split a video, using [ffmpeg](https://www.ffmpeg.org) for example, and us
 ffmpeg -i video-frame-%0d.png -c:v libx264 -vf "fps=25,format=yuv420p" out.mp4
 ```
 
+## Combine audio with generated video
+The generated video might not contains voices. You could use [ffmpeg](https://www.ffmpeg.org) to extract voice from input video to combine with our output.
+
+Extract audio:
+
+```bash
+ffmpeg -i ios.mp4 -f mp3 -ab 192000 -vn bg.mp3
+```
+
+Combine audio with video:
+
+```bash
+ffmpeg -i out.mp4 -i bg.mp3 -c:v copy -map 0:v:0 -map 1:a:0 new.mp4
+```
+
+## Adjust video speed
+The generated video might have a different speed thus a different length from the original video. You could use ffmeg to adjust the speed:
+
+```bash
+ffmpeg -i out.mp4 -filter:v "setpts=0.8*PTS" out2.mp4
+```
+
+
 ## Notes
 This guide is far from complete. Functionality may change over time, and new dependencies are added and removed as time goes on. 
 
